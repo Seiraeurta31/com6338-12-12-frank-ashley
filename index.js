@@ -26,16 +26,90 @@ class Word {
   }
 
   // implement the guessLetter function:
-  // guessLetter(letter) {}
+  guessLetter(letter) {
+
+    var correctGuess = false
+    //Break word and displayWord into char array
+    let wordToGuess = this.word.split('')
+    let displayWordArray = this.displayWord.split('')
+
+    //Check if the letter is found in the word array
+    for(let i=0; i<displayWordArray.length; i++){
+      if(letter == wordToGuess[i]){
+        //If a match, replace _ with letter in displayWord
+        displayWordArray[i] = letter
+        correctGuess = true  //mark letter was found
+        //If letter is not already in list of correct letters, add it
+        if(!this.correctLetters.includes(letter)){
+          this.correctLetters.push(letter)
+        }  
+      }
+    } 
+
+    //Letter was not found in word, mark as incorrect letter
+    if(!correctGuess){
+      this.incorrectLetters.push(letter)
+      this.remainingGuesses -- //reduce guess count
+    }
+
+    //Convert displayWord back to string
+    this.displayWord = displayWordArray.join('')
+
+  }
 
   // implement the updateScreen function:
-  // updateScreen() {}
+  updateScreen() {
+
+    //Access DOM elements
+    const wordToGuess = document.getElementById('word-to-guess')
+    const incorrectLettersDisplay = document.getElementById('incorrect-letters')
+    const remainingGuessDisplay = document.getElementById('remaining-guesses')
+
+    //Update display values to the page
+    wordToGuess.textContent = this.displayWord
+    incorrectLettersDisplay.textContent = this.incorrectLetters
+    remainingGuessDisplay.textContent = this.remainingGuesses
+
+  }
 
   // implement the isGameOver function:
-  // isGameOver() {}
+  isGameOver() {
+
+    var gameOver = false
+
+    //Set game over values based on game status
+    if((this.displayWord !== this.word) && (this.remainingGuesses > 0)){
+      gameOver = false
+    }
+    else if((this.displayWord === this.word) && (this.remainingGuesses > 0)){
+      gameOver = true
+    }
+    else if((this.displayWord !== this.word) && (this.remainingGuesses <= 0)){
+      gameOver = true
+    }
+    else if((this.displayWord === this.word) && (this.remainingGuesses <= 0)){
+      gameOver = true
+    }
+
+    return gameOver
+  }
 
   // implement the getWinOrLoss function:
-  // getWinOrLoss() {}
+  getWinOrLoss() {
+
+    var gameResult = null
+
+    //Update game result based on game status
+    if((this.displayWord === this.word) && (this.remainingGuesses > 0)){
+      gameResult = "win"
+    }
+    else if((this.displayWord !== this.word) && (this.remainingGuesses <= 0)){
+      gameResult = "loss"
+    }
+
+    return gameResult
+
+  }
 }
 
 function newGame() {
